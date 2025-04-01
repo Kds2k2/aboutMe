@@ -1,23 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Profile</title>
+    <title>Title</title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <div class="theme-switch">
+        <label class="switch">
+            <input type="checkbox" id="theme-toggle" />
+            <span class="slider"></span>
+        </label>
+    </div>
+
     <div class="container">
-        <img id="profile-pic" src="" alt="Profile Picture">
-        <h1 id="name">Your Name</h1>
-        <p id="bio">Your short description goes here...</p>
+
+        <div class="profile">
+            <img id="profile-pic" src="" alt="Profile Picture" class="profile-image">
+            <div class="text-container">
+                <h1 id="name">Your Name</h1>
+                <p id="bio">Your short description goes here...</p>
+            </div>
+        </div>
+
         <div class="projects">
             <h2>My Projects</h2>
             <ul id="repo-list"></ul>
         </div>
+
     </div>
 
-    <script>
+    <img src="Resources/bonfire.png" alt="Bonfire" class="bonfire-image">
+    </div>
+    <script type="module">
         const username = "Kds2k2";
         
         async function fetchGitHubProfile() {
@@ -42,6 +58,23 @@
         
         fetchGitHubProfile();
         fetchGitHubRepos();
+
+        const themeToggle = document.getElementById("theme-toggle");
+        const root = document.documentElement;
+
+        themeToggle.addEventListener("change", (e) => {
+            if (e.target.checked) {
+                root.setAttribute("data-theme", "dark");
+                localStorage.setItem("theme", "dark");
+            } else {
+                root.setAttribute("data-theme", "light");
+                localStorage.setItem("theme", "light");
+            }
+        });
+
+        const savedTheme = localStorage.getItem("theme") || "light";
+        root.setAttribute("data-theme", savedTheme);
+        themeToggle.checked = savedTheme === "dark";
     </script>
 </body>
 </html>
