@@ -177,12 +177,12 @@ p {
 
 .profile {
     display: flex;
-    align-items: flex-start; /* Align items to the top-left */
-    gap: 10px; /* Space between image and text */
+    align-items: flex-start;
+    gap: 10px;
 }
 
 .text-container {
     display: flex;
-    flex-direction: column; /* Stack title and description vertically */
-    align-items: flex-start; /* Align text to the left */
+    flex-direction: column;
+    align-items: flex-start;
 }
