@@ -15,21 +15,6 @@
     ]
   },
   {
-    "id": 2,
-    "title": "ParserForProm",
-    "description": "WPF‑застосунок для отримання даних про товари з різних джерел і експорту їх на PROM у формат Excel. Має модульну архітектуру, що спрощує додавання нових джерел даних.",
-    "technologies": [".NET", "WPF", "C#", "Excel"],
-    "folder": "ParserForProm",
-    "screenshots": "Screenshots",
-    "features": [
-      "Modular plugin architecture",
-      "Multi-language support",
-      "Modern WPF interface",
-      "Data export to Excel",
-      "Support for multiple data sources"
-    ]
-  },
-  {
     "id": 3,
     "title": "YourJob",
     "description": "iOS‑застосунок для пошуку роботи, який допомагає швидко знаходити вакансії за заданими критеріями. Реалізований з акцентом на сучасну архітектуру, хмарні сервіси AWS та зручний інтерфейс.",
@@ -42,6 +27,21 @@
       "Job details viewing",
       "Modern iOS interface",
       "AWS backend integration"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "ParserForProm",
+    "description": "WPF‑застосунок для отримання даних про товари з різних джерел і експорту їх на PROM у формат Excel. Має модульну архітектуру, що спрощує додавання нових джерел даних.",
+    "technologies": [".NET", "WPF", "C#", "Excel"],
+    "folder": "ParserForProm",
+    "screenshots": "Screenshots",
+    "features": [
+      "Modular plugin architecture",
+      "Multi-language support",
+      "Modern WPF interface",
+      "Data export to Excel",
+      "Support for multiple data sources"
     ]
   }
 ]

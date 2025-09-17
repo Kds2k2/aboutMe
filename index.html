@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dmytro Kryzhanovsky · Projects</title>
+    <title>Дмитро Крижановський · Проекти</title>
     <style>
         :root {
             --bg-color: #1a1a1a;
@@ -267,13 +267,14 @@
             text-decoration: underline;
         }
 
-        /* Keep chevron on the right even when summary is hidden */
+        /* Keep chevron on the right and title visible when expanded */
         .project-row.expanded .project-header {
-            justify-content: flex-end;
+            justify-content: space-between;
         }
 
-        /* Hide summary (title/description/technologies) when expanded */
-        .project-row.expanded .project-summary {
+        /* Hide only description and technologies when expanded; keep title visible */
+        .project-row.expanded .project-summary .project-description,
+        .project-row.expanded .project-summary .project-tech {
             display: none;
         }
 
@@ -300,6 +301,34 @@
             position: fixed;
             top: 1rem;
             right: 1rem;
+        }
+
+        /* Keep title link styling consistent */
+        .project-title a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        .project-title a:hover {
+            text-decoration: underline;
+        }
+
+        /* Social links styling */
+        .social-links {
+            display: flex;
+            gap: .75rem;
+            flex-wrap: wrap;
+            margin: .25rem 0 0 0;
+        }
+        .social-links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            padding: .25rem .55rem;
+            border-radius: 6px;
+            font-size: .95rem;
+        }
+        .social-links a:hover {
+            background: var(--card-hover);
         }
 
         .switch {
@@ -362,13 +391,16 @@
         <div class="profile">
             <img id="profile-pic" src="https://avatars.githubusercontent.com/u/50978368?s=96&v=4" alt="Profile Picture" class="profile-image">
             <div class="text-container">
-                <h1 id="name">Dmytro Kryzhanovsky</h1>
-                <p id="bio">Software Developer | Mobile & Web Applications</p>
+                <h1 id="name">Дмитро Крижановський</h1>
+                <div id="bio" class="social-links">
+                    <a href="https://github.com/Kds2k2" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://www.linkedin.com/in/dima-kryzhanovsky-53a74b1b9/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                </div>
             </div>
         </div>
 
         <div class="projects">
-            <h2>My Projects</h2>
+            <h2>Мої проекти</h2>
             <div id="projects-container"></div>
         </div>
     </div>
@@ -876,48 +908,48 @@ YourJob — навчальний проєкт мобільного застос�
                 console.warn('Failed to fetch projects.json, using inline fallback.', err);
                 return [
                     {
-                        id: 1,
-                        title: 'eShop',
-                        description: 'A modern iOS application for browsing a catalog of household goods, managing shopping carts, creating orders, and leaving reviews. The backend is built on AWS serverless architecture with GraphQL API on AppSync.',
-                        technologies: ['iOS', 'Swift', 'AWS', 'GraphQL', 'AppSync'],
-                        folder: 'eShop',
-                        screenshots: 'Screenshots',
-                        features: [
-                            'Catalog browsing',
-                            'Shopping cart management',
-                            'Order creation',
-                            'Product reviews',
-                            'User authentication'
+                        "id": 1,
+                        "title": "eShop",
+                        "description": "Сучасний iOS‑застосунок для перегляду каталогу побутових товарів, керування кошиком, оформлення замовлень і залишення відгуків. Бекенд побудований на безсерверній архітектурі AWS з GraphQL API на AppSync.",
+                        "technologies": ["iOS", "Swift", "UIKit", "AWS"],
+                        "folder": "eShop",
+                        "screenshots": "Screenshots",
+                        "features": [
+                        "Catalog browsing",
+                        "Shopping cart management",
+                        "Order creation",
+                        "Product reviews",
+                        "User authentication"
                         ]
                     },
                     {
-                        id: 2,
-                        title: 'ParserForProm',
-                        description: 'WPF application designed to retrieve product data from various sources and export them to PROM in Excel format. Features a modular architecture that allows easy addition of support for new data sources.',
-                        technologies: ['.NET', 'WPF', 'C#', 'Excel'],
-                        folder: 'ParserForProm',
-                        screenshots: 'Screenshots',
-                        features: [
-                            'Modular plugin architecture',
-                            'Multi-language support',
-                            'Modern WPF interface',
-                            'Data export to Excel',
-                            'Support for multiple data sources'
+                        "id": 3,
+                        "title": "YourJob",
+                        "description": "iOS‑застосунок для пошуку роботи, який допомагає швидко знаходити вакансії за заданими критеріями. Реалізований з акцентом на сучасну архітектуру, хмарні сервіси AWS та зручний інтерфейс.",
+                        "technologies": ["iOS", "Swift", "UIKit", "AWS"],
+                        "folder": "YourJob",
+                        "screenshots": "Screenshots",
+                        "features": [
+                        "User registration and authentication via Amazon Cognito",
+                        "Job search and filtering by categories, position, location, and salary",
+                        "Job details viewing",
+                        "Modern iOS interface",
+                        "AWS backend integration"
                         ]
                     },
                     {
-                        id: 3,
-                        title: 'YourJob',
-                        description: 'An iOS job search application that helps users quickly find job vacancies based on specified criteria. The application is implemented for iOS with a focus on modern architecture, AWS cloud services, and a user-friendly interface.',
-                        technologies: ['iOS', 'Swift', 'AWS', 'Cognito', 'GraphQL'],
-                        folder: 'YourJob',
-                        screenshots: 'Screenshots',
-                        features: [
-                            'User registration and authentication via Amazon Cognito',
-                            'Job search and filtering by categories, position, location, and salary',
-                            'Job details viewing',
-                            'Modern iOS interface',
-                            'AWS backend integration'
+                        "id": 2,
+                        "title": "ParserForProm",
+                        "description": "WPF‑застосунок для отримання даних про товари з різних джерел і експорту їх на PROM у формат Excel. Має модульну архітектуру, що спрощує додавання нових джерел даних.",
+                        "technologies": [".NET", "C#", "WPF"],
+                        "folder": "ParserForProm",
+                        "screenshots": "Screenshots",
+                        "features": [
+                        "Modular plugin architecture",
+                        "Multi-language support",
+                        "Modern WPF interface",
+                        "Data export to Excel",
+                        "Support for multiple data sources"
                         ]
                     }
                 ];
@@ -956,13 +988,13 @@ YourJob — навчальний проєкт мобільного застос�
                     return;
                 }
 
-                // Render projects
+                // Render projects (make only the title clickable to GitHub)
                 container.innerHTML = projects.map(project => `
                     <div class="project-row" data-folder="${project.folder}">
                         <div class="project-header">
                             <div class="project-summary">
-                                <h3 class="project-title">${project.title}</h3>
-                                <p>${project.description}</p>
+                                <h3 class="project-title"><a href="${(project.folder==='eShop' && 'https://github.com/Kds2k2/eShop') || (project.folder==='ParserForProm' && 'https://github.com/Kds2k2/Parser_FromVidexToExcel') || (project.folder==='YourJob' && 'https://github.com/Kds2k2/YourJob') || '#'}" target="_blank" rel="noopener noreferrer">${project.title}</a></h3>
+                                <p class="project-description">${project.description}</p>
                                 <div class="project-tech">
                                     <strong>Technologies:</strong> ${project.technologies.join(', ')}
                                 </div>
@@ -1038,8 +1070,7 @@ YourJob — навчальний проєкт мобільного застос�
             setupThemeToggle();
             
             // Set profile info
-            document.getElementById('name').textContent = 'Dmytro Kryzhanovsky';
-            document.getElementById('bio').textContent = 'Software Developer | Mobile & Web Applications';
+            document.getElementById('name').textContent = 'Дмитро Крижановський';
             
             // Check if there's a hash in the URL to auto-expand a project
             const handleHashChange = async () => {
@@ -1055,7 +1086,7 @@ YourJob — навчальний проєкт мобільного застос�
                     let projects;
                     try { projects = await loadProjects(); } catch { projects = []; }
                     await toggleProjectDetails(button, details, hash, projects[index]);
-                    projectRow.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    projectRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             };
             
