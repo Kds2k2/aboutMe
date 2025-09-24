@@ -1,1101 +1,285 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Дмитро Крижановський · Проекти</title>
-    <style>
-        :root {
-            --bg-color: #1a1a1a;
-            --text-color: #f0f0f0;
-            --accent-color: #646cff;
-            --card-bg: #2a2a2a;
-            --card-hover: #3a3a3a;
-            --border-color: #444;
-            --code-bg: #1e1e1e;
-        }
-
-        [data-theme="light"] {
-            --bg-color: #f5f5f5;
-            --text-color: #333;
-            --accent-color: #646cff;
-            --card-bg: #fff;
-            --card-hover: #f9f9f9;
-            --border-color: #ddd;
-            --code-bg: #f0f0f0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .profile {
-            display: flex;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .profile-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 1.5rem;
-            border: 3px solid var(--accent-color);
-        }
-
-        .projects {
-            margin-top: 2rem;
-        }
-
-        .project-row {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .project-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        
-        .project-header h3 {
-            margin: 0;
-            flex-grow: 1;
-        }
-        
-        .chevron-btn {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 1.2em;
-            cursor: pointer;
-            padding: 0.5rem;
-            margin-left: 1rem;
-            transition: transform 0.3s ease;
-        }
-        
-        .chevron-btn.expanded {
-            transform: none;
-        }
-
-        .project-row:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .project-title {
-            color: var(--accent-color);
-            margin-top: 0;
-        }
-
-        .project-tech {
-            color: #888;
-            font-size: 0.9em;
-            margin: 0.5rem 0;
-        }
-
-        .repo-details {
-            margin-top: 1rem;
-            padding: 0;
-            border-top: 1px solid var(--border-color);
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            opacity: 0;
-        }
-        
-        .repo-details.visible {
-            max-height: none;
-            padding: 1.5rem 1rem;
-            margin: 1rem 0;
-            opacity: 1;
-            overflow: visible;
-        }
-        
-        .readme-content {
-            width: 100%;
-            max-width: 100%;
-            overflow-x: auto;
-            word-wrap: break-word;
-            word-break: break-word;
-            line-height: 1.6;
-            color: var(--text-color);
-        }
-        
-        .readme-content img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 1.5em auto;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .readme-content pre {
-            background: var(--code-bg);
-            padding: 1.2em;
-            border-radius: 6px;
-            overflow-x: auto;
-            margin: 1.2em 0;
-            font-size: 0.9em;
-            line-height: 1.5;
-        }
-        
-        .readme-content code {
-            font-family: 'Courier New', Courier, monospace;
-            background: var(--code-bg);
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-            font-size: 0.9em;
-        }
-        
-        .readme-content pre code {
-            padding: 0;
-            background: transparent;
-        }
-        
-        .readme-content h1, 
-        .readme-content h2, 
-        .readme-content h3, 
-        .readme-content h4, 
-        .readme-content h5, 
-        .readme-content h6 {
-            margin: 1.5em 0 0.8em 0;
-            color: var(--accent-color);
-            line-height: 1.3;
-        }
-        
-        .readme-content h1 { font-size: 1.8em; }
-        .readme-content h2 { font-size: 1.5em; }
-        .readme-content h3 { font-size: 1.3em; }
-        .readme-content h4 { font-size: 1.1em; }
-        
-        .readme-content p {
-            margin: 1em 0;
-            line-height: 1.6;
-        }
-        
-        .readme-content ul, 
-        .readme-content ol {
-            margin: 1em 0;
-            padding-left: 2em;
-        }
-        
-        .readme-content li {
-            margin: 0.5em 0;
-        }
-        
-        .readme-content a {
-            color: var(--accent-color);
-            text-decoration: none;
-            border-bottom: 1px solid var(--accent-color);
-            transition: all 0.2s ease;
-        }
-        
-        .readme-content a:hover {
-            opacity: 0.8;
-            border-bottom-width: 2px;
-        }
-        
-        /* Style markdown content */
-        .repo-details h1, 
-        .repo-details h2, 
-        .repo-details h3, 
-        .repo-details h4, 
-        .repo-details h5, 
-        .repo-details h6 {
-            margin: 1em 0 0.5em 0;
-            color: var(--accent-color);
-        }
-        
-        .repo-details p {
-            margin: 0.8em 0;
-            line-height: 1.6;
-        }
-        
-        .repo-details ul, 
-        .repo-details ol {
-            padding-left: 1.5em;
-            margin: 0.5em 0;
-        }
-        
-        .repo-details code {
-            background: var(--code-bg);
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-            font-family: monospace;
-            font-size: 0.9em;
-        }
-        
-        .repo-details pre {
-            background: var(--code-bg);
-            padding: 1em;
-            border-radius: 4px;
-            overflow-x: auto;
-        }
-        
-        .repo-details img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            margin: 1em 0;
-        }
-        
-        .repo-details a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-        
-        .repo-details a:hover {
-            text-decoration: underline;
-        }
-
-        /* Keep chevron on the right and title visible when expanded */
-        .project-row.expanded .project-header {
-            justify-content: space-between;
-        }
-
-        /* Hide only description and technologies when expanded; keep title visible */
-        .project-row.expanded .project-summary .project-description,
-        .project-row.expanded .project-summary .project-tech {
-            display: none;
-        }
-
-        /* Remove separator and extra spacing when expanded */
-        .project-row.expanded .repo-details {
-            border-top: none;
-            margin-top: 0;
-        }
-        .project-row.expanded .repo-details.visible {
-            padding-top: 0;
-            margin-top: 0;
-        }
-
-        .repo-details h4 {
-            margin-top: 0;
-        }
-
-        .repo-details ul {
-            padding-left: 1.5rem;
-            margin: 0.5rem 0 0 0;
-        }
-
-        .theme-switch {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-        }
-
-        /* Keep title link styling consistent */
-        .project-title a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-        .project-title a:hover {
-            text-decoration: underline;
-        }
-
-        /* Social links styling */
-        .social-links {
-            display: flex;
-            gap: .75rem;
-            flex-wrap: wrap;
-            margin: .25rem 0 0 0;
-        }
-        .social-links a {
-            color: var(--accent-color);
-            text-decoration: none;
-            border: 1px solid var(--border-color);
-            padding: .25rem .55rem;
-            border-radius: 6px;
-            font-size: .95rem;
-        }
-        .social-links a:hover {
-            background: var(--card-hover);
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--accent-color);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.5/dist/purify.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dima Kryzhanovsky · Portfolio</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap">
 </head>
+
 <body>
-    <div class="theme-switch">
-        <label class="switch">
-            <input type="checkbox" id="theme-toggle">
-            <span class="slider"></span>
-        </label>
+  <canvas id="bgCanvas" width="1416" height="1284"></canvas>
+
+  <div class="pageone" id="home">
+    <div id="hello" class="scroll-vanish hero-card visible">
+      <div class="hero-media">
+        <img src="assets/images/profile.jpg" alt="Portrait of Dima Kryzhanovsky" class="hero-photo">
+      </div>
+      <div class="hero-content">
+        <div class="hero-intro">
+          <p class="first_line">Oh, hello. Welcome to my portfolio!<span class="cursor blink"></p>
+          <p class="second_text">Dima Kryzhanovsky,<br>Software Engineer</p>
+          <p class="third_text">I produce elegant, performant, and accessible code.<br>Currently in Khmelnytskyi, Ukraine.</p>
+        </div>
+        <div class="hero-cta">
+          <a class="hero-btn" href="#about" data-hero-about="">About</a>
+          <a class="hero-btn" href="#portfolio">Projects</a>
+          <a class="hero-btn hero-btn--ghost" href="#contact">Contact</a>
+        </div>
+        <p class="lasst">Scroll</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="header" id="myHeader">
+    <nav id="navigation1" class="nav-shell glass-panel">
+      <a class="nav-brand" href="#home" data-hero-reset="">
+        
+      </a>
+      <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-navigation" data-nav-toggle="">
+        <span class="nav-toggle-line"></span>
+        <span class="nav-toggle-line"></span>
+      </button>
+      <div class="nav-links" id="primary-navigation" data-nav-links="">
+        <ul class="nav navbar-nav">
+          <li><a href="#home" data-hero-reset="">Home</a></li>
+          <li><a href="#about" data-hero-about="">About</a></li>
+          <li><a href="#portfolio">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <div class="content">
+    <div class="pagetwo scroll-vanish section-fade fade-up" id="about">
+      <div class="section-shell glass-panel about-section" data-about-tabs="">
+        <div class="section-header">
+          <h2 class="heading2">About</h2>
+        </div>
+        <div class="about-body">
+          <div class="about-tabs" role="tablist" aria-label="About content">
+            <button class="about-tab active" id="about-tab-intro" role="tab" aria-selected="true" aria-controls="about-panel-intro" data-about-target="intro" tabindex="0">Intro</button>
+            <button class="about-tab" id="about-tab-skills" role="tab" aria-selected="false" aria-controls="about-panel-skills" data-about-target="skills" tabindex="-1">Skills</button>
+            <button class="about-tab" id="about-tab-education" role="tab" aria-selected="false" aria-controls="about-panel-education" data-about-target="education" tabindex="-1">Education</button>
+          </div>
+          <div class="about-panels">
+            <article class="about-panel active" id="about-panel-intro" role="tabpanel" aria-labelledby="about-tab-intro" data-about-panel="intro" aria-hidden="false">
+              <p class="text1">I'm Dima (2002, Ukraine). I build iOS apps and Windows desktop applications. Coding to me is more than just work—it’s a passion that grows stronger every day and a way to turn ideas into reality.</p>
+              <p class="text1">Developers are modern magicians; we transform complicated technical concepts or even wild thoughts into engaging, useful apps. Along my journey, I’ve been fortunate to learn, experiment, and grow with the help of projects, challenges, and the amazing developer community around me.</p>
+              <p class="text1">I’m always open to new opportunities and innovative collaborations. You can usually find me hanging around <a href="https://www.linkedin.com/in/dima-kryzhanovsky-53a74b1b9/" class="link" target="_blank">LinkedIn</a>.</p>
+            </article>
+            <article class="about-panel" id="about-panel-skills" role="tabpanel" aria-labelledby="about-tab-skills" data-about-panel="skills" aria-hidden="true">
+              <p class="text1">My toolkit spans product thinking, front-end craft, and the rapidly evolving GenAI space.</p>
+
+                <!-- Row 1 (Right to Left) -->
+                <section class="skills-showcase">
+
+                <!-- Row 1: Languages -->
+                <div class="skills-slider rtl">
+                    <div class="slide-track">
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg"> Swift</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg"> C#</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg"> GraphQL</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xml/xml-original.svg"> XML</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"> HTML</div>
+
+                    <!-- duplicate set for infinite loop -->
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg"> Swift</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg"> C#</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg"> GraphQL</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xml/xml-original.svg"> XML</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"> HTML</div>
+                    </div>
+                </div>
+
+                <!-- Row 2: Frameworks -->
+                <div class="skills-slider ltr">
+                    <div class="slide-track">
+                    <div class="skill-chip"><img src="https://developer.apple.com/assets/elements/icons/xcode/xcode-96x96_2x.png"> Xcode</div>
+                    <div class="skill-chip"><img src="https://img.icons8.com/ios-filled/50/ffffff/app-symbol.png"> UIKit</div>
+                    <div class="skill-chip"><img src="https://developer.apple.com/assets/elements/icons/swiftui/swiftui-96x96_2x.png"> SwiftUI</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg"> Combine</div>
+
+                    <!-- duplicate set -->
+                    <div class="skill-chip"><img src="https://developer.apple.com/assets/elements/icons/xcode/xcode-96x96_2x.png"> Xcode</div>
+                    <div class="skill-chip"><img src="https://img.icons8.com/ios-filled/50/ffffff/app-symbol.png"> UIKit</div>
+                    <div class="skill-chip"><img src="https://developer.apple.com/assets/elements/icons/swiftui/swiftui-96x96_2x.png"> SwiftUI</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/swift/swift-original.svg"> Combine</div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Tools -->
+                <div class="skills-slider rtl">
+                    <div class="slide-track">
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg"> AWS</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sourcetree/sourcetree-original.svg"> SourceTree</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"> GitHub</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg"> Figma</div>
+
+                    <!-- duplicate set -->
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg"> AWS</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sourcetree/sourcetree-original.svg"> SourceTree</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"> GitHub</div>
+                    <div class="skill-chip"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg"> Figma</div>
+                    </div>
+                </div>
+
+                </section>
+
+            </article>
+            <article class="about-panel" id="about-panel-education" role="tabpanel" aria-labelledby="about-tab-education" data-about-panel="education" aria-hidden="true">
+              <ul class="about-timeline">
+                <li>
+                  <span class="about-role">Bachelor's degree, Computer Software Engineering</span>
+                  <span class="about-meta">Khmelnytskyi National University · Sep 2020 – June 2024</span>
+                  <p class="about-detail">Graduated with hands-on projects in iOS development.</p>
+                </li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="container">
-        <div class="profile">
-            <img id="profile-pic" src="https://avatars.githubusercontent.com/u/50978368?s=96&v=4" alt="Profile Picture" class="profile-image">
-            <div class="text-container">
-                <h1 id="name">Дмитро Крижановський</h1>
-                <div id="bio" class="social-links">
-                    <a href="https://github.com/Kds2k2" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    <a href="https://www.linkedin.com/in/dima-kryzhanovsky-53a74b1b9/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                </div>
-            </div>
+    <div class="pagethree scroll-vanish fade-up" id="portfolio">
+      <div class="section-shell glass-panel">
+        <div class="section-header">
+          <h2 class="heading2">Few recent projects</h2>
+          <p class="text1">I'm proud of my work, below are samples of my most recent projects.</p>
+        </div>
+        <div class="project-filter">
+          <button class="filter-btn active" data-filter="swift">Swift</button>
+          <button class="filter-btn" data-filter="csharp">C#</button>
         </div>
 
         <div class="projects">
-            <h2>Мої проекти</h2>
-            <div id="projects-container"></div>
+          <div class="project-category" data-category="swift" style="">
+            <h3 class="category-title">Swift Projects</h3>
+            <div class="project-row">
+              <div class="project">
+                <div class="logo-slider">
+                  <div class="slide-track">
+                    <img src="assets/images/projects/eShop/eShop_Categories+ProductsScreen.png" alt="eShop Categories+Products" class="tech-logo-slide">
+                    <img src="assets/images/projects/eShop/eShop_History+BrandsScreen.png" alt="eShop History+Brands" class="tech-logo-slide">
+                    <img src="assets/images/projects/eShop/eShop_Launch+WelcomeScreens.png" alt="eShop Launch+Welcome" class="tech-logo-slide">
+                    <img src="assets/images/projects/eShop/eShop_Login+ForgotPasswordScreen.png" alt="eShop Login+ForgotPassword" class="tech-logo-slide">
+                    <img src="assets/images/projects/eShop/eShop_Menu+AboutScreen.png" alt="eShop Menu+About" class="tech-logo-slide">
+                    <img src="assets/images/projects/eShop/eShop_Order+ThankScreen.png" alt="eShop Order+ThankScreen" class="tech-logo-slide">
+                    <img src="assets/images/projects/eShop/eShop_Product+CharacteristicsScreen.png" alt="eShop Product+Characteristics" class="tech-logo-slide">
+                    <img src="assets/images/projects/eShop/eShop_Reviews+ReviewScreen.png" alt="eShop Reviews+Review" class="tech-logo-slide">
+                  </div>
+                </div>
+                <p class="lead1"><b>eShop</b> | <a href="https://github.com/Kds2k2/eShop" target="_blank"><u>Github</u></a></p>
+                <p class="text1">A modern iOS application for browsing the product catalog, creating a cart, creating orders, and leaving reviews.</p>
+                <p class="project-tech">UIKit · MVC · XCTest · AWS · GraphQL · AppSync</p>
+                <div class="project-tags">
+                  <img src="assets/images/logos/swift.png" alt="Swift" class="tech-logo" title="Swift">
+                </div>
+              </div>
+
+              <div class="project">
+                <div class="logo-slider">
+                  <div class="slide-track">
+                    <img src="assets/images/projects/YourJob/LaunchScreen.png" alt="AuraLights Scheduler" class="tech-logo-slide">
+                    <img src="assets/images/projects/YourJob/WelcomeScreen.png" alt="AuraLights Home" class="tech-logo-slide">
+                    <img src="assets/images/projects/YourJob/JobsScreen.png" alt="AuraLights Slider" class="tech-logo-slide">
+                    <img src="assets/images/projects/YourJob/DetailsScreen.png" alt="AuraLights Grid" class="tech-logo-slide">
+                    <img src="assets/images/projects/YourJob/FilterScreen.png" alt="AuraLights Scheduler" class="tech-logo-slide">
+                    <img src="assets/images/projects/YourJob/LoginScreen.png" alt="AuraLights Slider" class="tech-logo-slide">
+                    <img src="assets/images/projects/YourJob/RegisterScreen.png" alt="AuraLights Grid" class="tech-logo-slide">
+                    <img src="assets/images/projects/YourJob/ForgorPasswordScreen.png" alt="AuraLights Scheduler" class="tech-logo-slide">
+                    <img src="assets/images/projects/YourJob/ConfirmationCodeScreen.png" alt="AuraLights Home" class="tech-logo-slide">
+                  </div>
+                </div>
+                <p class="lead1"><b>YourJob</b> | <a href="https://github.com/Kds2k2/YourJob" target="_blank"><u>Github</u></a></p>
+                <p class="text1">YourJob is an educational mobile application project that helps you quickly find vacancies based on specified criteria.</p>
+                <p class="project-tech">UIKit · MVC · AWS · GraphQL · AppSync</p>
+                <div class="project-tags">
+                  <img src="assets/images/logos/swift.png" alt="Swift" class="tech-logo" title="Swift">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-category hide" data-category="csharp" style="display: none;">
+            <h3 class="category-title">C# Projects</h3>
+            <div class="project-row">
+              <div class="project">
+                <a href="https://github.com/Kds2k2/ParserForProm" target="_blank"><img src="assets/images/projects/ParserForProm/MainScreen.png" alt="Parser For Prom" class="responsive img4"></a>
+                <p class="lead1"><b>Parser For Prom</b> | <a href="https://github.com/Kds2k2/ParserForProm" target="_blank"><u>Github</u></a></p>
+                <p class="text1">A WPF application designed to retrieve product data from various sources and export it to PROM in Excel format.</p>
+                <div class="project-tags">
+                  <img src="assets/images/logos/csharp.png" alt="Csharp" title="Csharp" class="tech-logo">
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
 
-    <script>
-        // Projects data
-        const projects = [
-            {
-                id: 1,
-                title: 'eShop',
-                description: 'Сучасний iOS‑застосунок для перегляду каталогу побутових товарів, керування кошиком, оформлення замовлень і залишення відгуків. Бекенд побудований на безсерверній архітектурі AWS з GraphQL API на AppSync.',
-                technologies: ['iOS', 'Swift', 'AWS', 'GraphQL', 'AppSync'],
-                features: [
-                    'Catalog browsing',
-                    'Shopping cart management',
-                    'Order creation',
-                    'Product reviews',
-                    'User authentication'
-                ]
-            },
-            {
-                id: 2,
-                title: 'ParserForProm',
-                description: 'WPF‑застосунок для отримання даних про товари з різних джерел і експорту їх на PROM у формат Excel. Має модульну архітектуру, що спрощує додавання нових джерел даних.',
-                technologies: ['.NET', 'WPF', 'C#', 'Excel'],
-                features: [
-                    'Modular plugin architecture',
-                    'Multi-language support',
-                    'Modern WPF interface',
-                    'Data export to Excel',
-                    'Support for multiple data sources'
-                ]
-            },
-            {
-                id: 3,
-                title: 'YourJob',
-                description: 'iOS‑застосунок для пошуку роботи, який допомагає швидко знаходити вакансії за заданими критеріями. Реалізований з акцентом на сучасну архітектуру, хмарні сервіси AWS та зручний інтерфейс.',
-                technologies: ['iOS', 'Swift', 'AWS', 'Cognito', 'GraphQL'],
-                features: [
-                    'User registration and authentication via Amazon Cognito',
-                    'Job search and filtering by categories, position, location, and salary',
-                    'Job details viewing',
-                    'Modern iOS interface',
-                    'AWS backend integration'
-                ]
-            }
-        ];
+    <div class="pagesix scroll-vanish fade-up" id="contact">
+      <div class="section-shell glass-panel">
+        <div class="section-header">
+          <h2 class="heading2">Contact Me</h2>
+          <p class="text1">Are you interested in a collaboration or do you just want to come by and say hello? I'm up for it all. I greatly appreciate you taking out the time to contact me!</p>
+        </div>
+        <div class="contact-card">
+          <div class="contact-info">
+            <span class="contact-kicker">
+              <span class="contact-kicker-dot" aria-hidden="true"></span>
+              Let's build something
+            </span>
+            <h3 class="contact_text">Thoughtful products deserve thoughtful engineering.</h3>
+            <p class="contact-body">I design and ship polished experiences and can help with: </p>
+            <ul class="contact-highlights">
+              <li>Building Swift interfaces built with modern UI and accessibility in mind.</li>
+              <li>Designing and shipping desktop apps.</li>
+              <li>Working with AWS and cloud technologies to build scalable solutions.</li>
+            </ul>
+          </div>
+          <div class="contact-actions">
+            <div class="contact-callout">
+              <span class="contact-status-dot" aria-hidden="true"></span>
+              Currently open to full time iOS SWE roles.
+            </div>
+            <div class="contact-buttons">
+              <a class="contact-button" href="mailto:dimakruzha@gmail.com">Email Me</a>
+            </div>
+
+            <p class="contact-email">
+              <a href="mailto:dimakruzha@gmail.com">dimakruzha@gmail.com</a>
+            </p>
+
+            <p class="social">
+              <a href="https://github.com/Kds2k2" class="github" target="_blank" aria-label="GitHub" rel="noopener noreferrer">
+                <img src="assets/images/logos/github.png" class="icon" alt="GitHub icon">
+              </a>
+              <a href="https://www.linkedin.com/in/dima-kryzhanovsky-53a74b1b9/" class="linkedin" target="_blank" aria-label="LinkedIn" rel="noopener noreferrer">
+                <img src="assets/images/logos/linkedIn.png" class="icon" alt="LinkedIn icon">
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="row text-center copyright">
+      <p class="footer_text">© 2025 Copyright. All Rights Reserved. Dima Kryzhanovsky.</p>
+    </div>
+  </div>
+
+  <script src="js/background.js"></script>
+  <script src="js/script.js"></script>
 
-        // Embedded README markdown per project (used to avoid fetch issues and to follow new Screenshots structure)
-        const embeddedReadmes = {
-            eShop: `## eShop — мобільний застосунок інтернет‑магазину побутових товарів
-
-Сучасний iOS‑застосунок для перегляду каталогу товарів, формування кошика, створення замовлень і залишення відгуків. Бекенд побудований на безсерверній архітектурі AWS з GraphQL API на AppSync.
-
-### Зміст
-
-- **Огляд**
-- **Функціональні можливості**
-- **Скріншоти інтерфейсу**
-- **Архітектура та технології**
-- **Модель даних (огляд)**
-- **Збирання та запуск (iOS)**
-- **Інтеграція AWS (Amplify)**
-- **Тестування**
-- **Ліцензія та авторство**
-
-### Огляд
-
-Мета — надати користувачам зручний інструмент для онлайн‑покупок побутових товарів. Застосунок реалізовано для iOS (UIKit, Swift), взаємодія з бекендом — через GraphQL/AppSync. Інфраструктура: Cognito, DynamoDB, S3, Lambda, OpenSearch, CloudWatch, Amplify.
-
-### Функціональні можливості
-
-- **Реєстрація/авторизація** (Cognito, email‑верифікація)
-- **Каталог і пошук** за фільтрами (OpenSearch)
-- **Детальна картка товару** з характеристиками, фото, статусом, ціною
-- **Кошик і оформлення замовлення**
-- **Відгуки та рейтинги**
-- **Список бажаного**
-- **Історія замовлень**
-- **Статичні сторінки**: Про нас, Доставка, Гарантія
-
-### Скріншоти інтерфейсу
-
-Нижче наведено частину макетів/екранів застосунку (див. папку Screenshots).
-
-<table>
-  <tr>
-    <td><img src="Screenshots/Launch+WelcomeScreens.png" alt="Launch & Welcome" width="100%"></td>
-    <td><img src="Screenshots/Login+ForgotPasswordScreen.png" alt="Login & Forgot Password" width="100%"></td>
-  </tr>
-  <tr>
-    <td><img src="Screenshots/Categories+ProductsScreen.png" alt="Categories & Products" width="100%"></td>
-    <td><img src="Screenshots/Product+CharacteristicsScreen.png" alt="Product & Characteristics" width="100%"></td>
-  </tr>
-  <tr>
-    <td><img src="Screenshots/Reviews+ReviewScreen.png" alt="Reviews" width="100%"></td>
-    <td><img src="Screenshots/History+BrandsScreen.png" alt="History & Brands" width="100%"></td>
-  </tr>
-  <tr>
-    <td><img src="Screenshots/Menu+AboutScreen.png" alt="Menu & About" width="100%"></td>
-    <td><img src="Screenshots/Order+ThankScreen.png" alt="Order & Thank You" width="100%"></td>
-  </tr>
- </table>
-
-### Архітектура та технології
-
-- **Безсерверна архітектура AWS**
-  - **AppSync (GraphQL API)** — єдина точка доступу
-  - **Cognito** — ідентифікація, аутентифікація, авторизація
-  - **Lambda (.NET/C#)** — бізнес‑логіка
-  - **DynamoDB** — NoSQL‑сховище сутностей
-  - **S3** — медіаконтент (зображення, документи)
-  - **OpenSearch** — індексація та пошук товарів
-  - **CloudWatch** — моніторинг і логи
-  - **Amplify** — інтеграція сервісів на клієнті, codegen моделей/запитів
-- **Клієнт iOS**: Swift + UIKit, архітектура екранів — MVC
-- **Аналітика/стабільність**: Firebase Analytics/Crashlytics
-
-#### Фрагмент GraphQL‑схеми (тип Product)
-
-\`\`\`graphql
-type Product @aws_iam @aws_cognito_user_pools {
-  id: ID!
-  brandId: ID!
-  brand: Brand!
-  categoryId: ID!
-  ean: String!
-  name: String!
-  siteUrl: AWSURL
-  imageUrl: AWSURL
-  items: [ProductItem!]
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
-}
-\`\`\`
-
-### Модель даних (огляд)
-
-- **Каталог**: \`Category\`, \`Brand\`, \`Product\`, \`ProductItem\`, \`ProductDetail\`, \`ProductAttribute\`, \`Attribute\`
-- **Ціни/знижки**: \`Discount\`, \`DiscountItem\`
-- **Запаси**: \`Inventory\`
-- **Кошик/замовлення**: \`Cart\`, \`CartItem\`, \`Order\`, \`OrderItem\`
-- **Адреса/одержувач**: \`Address\`, \`Recipient\`
-- **Відгуки/рейтинги**: \`Review\`, \`Rating\`
-- **Список бажаного**: \`Wishlist\`
-
-### Збирання та запуск (iOS)
-
-Вимоги:
-
-- macOS, Xcode 15+
-- iOS 15.0+ (симулятор або реальний пристрій)
-- CocoaPods
-
-Кроки:
-
-1. Встановіть залежності (Pods) і відкрийте воркспейс у Xcode
-2. Запустіть на симуляторі/пристрої
-
-При необхідності додайте файли конфігурації (Firebase, Amplify) до відповідних каталогів проєкту.
-
-### Інтеграція AWS (Amplify)
-
-Базова послідовність команд:
-
-\`\`\`bash
-amplify init
-amplify import auth
-amplify import storage
-amplify codegen add --apiId <APPSYNC_API_ID>
-amplify push
-\`\`\`
-
-У результаті буде згенеровано \`awsconfiguration.json\` і клієнтські GraphQL‑моделі/запити.
-
-### Тестування
-
-- **Lambda (.NET/C#)** — модульні тести бізнес‑логіки
-- **iOS** — Unit/Integration/UI‑тести (XCTest), тестові JSON‑відповіді
-- **Хмарні сервіси** — ручні перевірки через консолі AppSync/OpenSearch та моніторинг у CloudWatch`,
-
-            ParserForProm: `# Парсер для товарів на PROM
-
-WPF-застосунок, призначений для отримання даних про товари з різних джерел та експорту їх на PROM у формат Excel. Застосунок має модульну архітектуру, що дозволяє легко додавати підтримку нових джерел даних.
-
-## Можливості
-
-- **Модульна архітектура**: Легке розширення за допомогою власних плагінів для різних джерел даних
-- **Багатомовна підтримка**: Вбудована підтримка кількох мов (наприклад, англійська, українська)
-- **Сучасний інтерфейс**: Чіткий, адаптивний інтерфейс WPF у сучасному стилі
-- **Експорт даних**: Експорт оброблених даних у формат Excel (XLSX)
-- **Пошук та фільтрація**: Розширені можливості пошуку та фільтрації категорій і товарів
-- **Система логування**: Вбудована система логування з різними рівнями деталізації
-
-## Скріншоти
-
-<p align="center">
-  <img src="Screenshots/MainScreen.png" alt="Головне вікно" width="90%"/>
-  <p align="center">Головне вікно програми</p>
-</p>
-
-<p align="center">
-  <img src="Screenshots/RelationScreen.png" alt="Перегляд товару" width="70%"/>
-  <p align="center">Вікно для створення зв'язків між категоріями товарів, PROM-категоріями та власних категорій</p>
-</p>
-
-## Вимоги
-
-- .NET 9.0 або новішої версії
-- Windows 10/11
-- Visual Studio 2022 (для розробки)
-
-## Встановлення
-
-1. Клонуйте репозиторій:
-   \`\`\`bash
-   git clone https://github.com/Kds2k2/Parser_FromVidexToExcel.git
-   \`\`\`
-2. Відкрийте рішення у Visual Studio 2022
-3. Зберіть рішення (Ctrl+Shift+B)
-4. Запустіть додаток (F5)
-
-## Використання
-
-1. Виберіть джерело даних з доступних плагінів
-2. Переглядайте або шукайте категорії товарів
-3. Виберіть товари для експорту
-4. Оберіть опції експорту та місце збереження
-5. Натисніть "Експортувати в Excel" для створення вихідного файлу
-
-## Розробка плагінів
-
-Щоб створити новий плагін:
-
-1. Створіть новий клас
-3. Реалізуйте інтерфейс \`IPlugin\`
-
-Приклад реалізації плагіна:
-
-\`\`\`csharp
-public class MyPlugin : IPlugin
-{
-    public string BaseUrl => "https://example.com";
-    public string CategoriesUrl => $"{BaseUrl}/categories";
-    public string PluginName => "Мій власний плагін";
-    
-    public async Task<List<ProductPreview>> GetProductPreviews(string url)
-    {
-        // Реалізація тут
-    }
-    
-    // Інші методи інтерфейсу...
-}
-\`\`\`
-
-## Залежності
-
-- [ClosedXML](https://github.com/ClosedXML/ClosedXML) - Для створення файлів Excel
-- [HtmlAgilityPack](https://html-agility-pack.net/) - Для аналізу HTML
-- [NPOI](https://github.com/nissl-lab/npoi) - Для роботи з файлами Excel
-
-## Локалізація
-
-Додаток підтримує кілька мов за допомогою файлів ресурсів. Щоб додати нову мову:
-
-1. Створіть новий файл ресурсів (наприклад, \`StringResources.fr.xaml\`)
-2. Додайте переклади для всіх рядків
-3. Оновіть вибір мови в налаштуваннях програми`,
-
-            YourJob: `## YourJob — мобільний застосунок для пошуку роботи (iOS)
-
-YourJob — навчальний проєкт мобільного застосунку, що допомагає швидко знаходити вакансії за заданими критеріями. Додаток реалізовано для iOS з акцентом на сучасну архітектуру, хмарні сервіси AWS та зручний інтерфейс.
-
-### Основні можливості
-
-- **Реєстрація та авторизація** через Amazon Cognito
-- **Пошук і фільтрація вакансій** за категоріями, назвою посади, локацією, віддаленістю та зарплатою
-- **Перегляд деталей вакансії** і інформації про роботодавця
-- **Збереження фільтра пошуку** між сеансами
-- **Темна/світла тема** та адаптивні інтерфейси для iPhone/iPad
-
-### Скриншоти
-
-Інтерфейс застосунку (натисніть, щоб переглянути у репозиторії):
-
-<table>
-  <tr>
-    <td><img src="Screenshots/LaunchScreen.png" alt="LaunchScreen" width="100%"></td>
-    <td><img src="Screenshots/WelcomeScreen.png" alt="Welcome" width="100%"></td>
-    <td><img src="Screenshots/RegisterScreen.png" alt="Register" width="100%"></td>
-  </tr>
-  <tr>
-    <td><img src="Screenshots/ConfirmationCodeScreen.png" alt="Confirmation" width="100%"></td>
-    <td><img src="Screenshots/LoginScreen.png" alt="Login" width="100%"></td>
-    <td><img src="Screenshots/ForgorPasswordScreen.png" alt="ForgotPassword" width="100%"></td>
-  </tr>
-  <tr>
-    <td><img src="Screenshots/JobsScreen.png" alt="Jobs" width="100%"></td>
-    <td><img src="Screenshots/DetailsScreen.png" alt="Details" width="100%"></td>
-    <td><img src="Screenshots/FilterScreen.png" alt="Filter" width="100%"></td>
-  </tr>
-</table>
-
-### Архітектура та дизайн
-
-- **Клієнтська частина (iOS, Swift)**: патерн MVC, адаптивні UI, підтримка тем.
-- **Бекенд (Serverless на AWS)**: GraphQL API через **AWS AppSync**, дані в **Amazon DynamoDB**.
-- **Аутентифікація**: **Amazon Cognito (User Pool)**.
-- **Аналітика та стабільність**: **Firebase Analytics**, **Firebase Crashlytics**.
-- **Кешування та офлайн-доступ (частково)**: локальний кеш AWS AppSync + власні кеші зображень.
-
-Сценарії доступу до даних:
-
-- AppSync ⇄ DynamoDB (GraphQL: query/mutation/subscription)
-- Cognito забезпечує авторизацію користувачів та підписування запитів
-
-### Технологічний стек
-
-- iOS 15+, Swift, Xcode, UIKit
-- CocoaPods: \`AWSAppSync\`, \`AWSCognitoIdentityProvider\`, \`Firebase/Analytics\`, \`Firebase/Crashlytics\`
-- AWS: Cognito, AppSync (GraphQL), DynamoDB, CloudWatch
-- Допоміжні інструменти: Node.js, AWS CLI, Amplify CLI
-
-### Встановлення та запуск (локально)
-
-1. Вимоги:
-
-   - Xcode 14+ (iOS 15+)
-   - CocoaPods встановлено (\`sudo gem install cocoapods\`)
-   - Node.js 18+, AWS CLI, Amplify CLI (\`npm i -g @aws-amplify/cli\`)
-
-2. Залежності iOS:
-
-   - Відкрийте термінал у корені проєкту та виконайте:
-     \`\`\`bash
-     pod install --repo-update
-     \`\`\`
-   - Відкрийте робочий файл \`YourJob.xcworkspace\` у Xcode.
-
-3. Налаштування AWS (скорочено):
-
-   - Створіть Cognito User Pool (Sign-in: Username або Email; дозволити самостійну реєстрацію; верифікація email).
-   - Створіть DynamoDB таблиці: \`YourJobEmployers\`, \`YourJobVacancies\` з Partition key \`id\`.
-   - Створіть AppSync GraphQL API, підключивши джерела даних до таблиць DynamoDB. Додайте схему з типами \`YourJobEmployer\`, \`YourJobVacancy\`, переліком категорій та операціями \`Query/Mutation\`.
-   - Імпортуйте конфіг до застосунку за допомогою Amplify CLI:
-     \`\`\`bash
-     amplify init
-     amplify import auth
-     amplify add codegen --appId <your-app-id>
-     amplify push
-     \`\`\`
-   - Переконайтеся, що згенерований \`awsconfiguration.json\` присутній у проєкті та налаштування AppSync/Cognito валідні.
-
-4. Запуск:
-   - Зберіть і запустіть застосунок у Xcode на симуляторі або пристрої.
-
-### Структура клієнтського проєкту (iOS)
-
-- \`Api/\` — GraphQL типи/операції та моделі
-- \`Components/\` — багаторазові UI-компоненти
-- \`Controllers/\` — екрани: Welcome, Sign Up, Login, Reset Password, Offers, Details, Filter
-- \`Extensions/\` — розширення та утиліти
-- \`Resources/\` — кольори, шрифти, зображення
-- \`AmplifyConfig/\`, \`GoogleService/\` — конфігурації сервісів
-- \`AppDelegate.swift\`, \`AppInfo.swift\` тощо — точка входу та службові класи
-
-Ключові екрани:
-
-- \`WelcomeViewController\` — вітальний екран і перевірка сесії
-- \`SignUpRegisterViewController\`, \`SignUpCompleteViewController\` — реєстрація і підтвердження email
-- \`LoginWithEmailViewController\`, \`ResetPasswordViewController\` — авторизація і відновлення паролю
-- \`VacancyOffersViewController\` — список вакансій, Pull-to-Refresh, пагінація/підвантаження
-- \`VacancyFilterViewController\` — налаштування фільтрів (категорії, назва, локація, віддалено, зарплата)
-- \`VacancyDetailsViewController\` — деталі вакансії та інформація про роботодавця`
-        };
-
-        // Function to display README content
-        async function loadReadme(projectName, container, projectData) {
-            let markdown = '';
-            try {
-                if (projectData && projectData.readme) {
-                    markdown = projectData.readme;
-                } else {
-                    if (embeddedReadmes[projectName]) {
-                        markdown = embeddedReadmes[projectName];
-                    } else {
-                    try {
-                        const resp = await fetch(`Projects/${projectName}/README.md`, { cache: 'no-store' });
-                        if (resp.ok) {
-                            markdown = await resp.text();
-                        }
-                    } catch (e) {
-                        // Likely file:// or CORS; fall back to features/links
-                    }
-                    }
-                }
-
-                if (!markdown) {
-                    const features = Array.isArray(projectData?.features) ? projectData.features : [];
-                    const featuresList = features.length
-                        ? `<ul>${features.map(f => `<li>${f}</li>`).join('')}</ul>`
-                        : '<p>No feature list available.</p>';
-
-                    const readmeHref = `Projects/${projectName}/README.md`;
-                    const screenshotsHref = `Projects/${projectName}/${projectData?.screenshots || 'Screenshots'}/`;
-
-                    container.innerHTML = `
-                        <div>
-                            <h3 style="margin-top:0">${projectData?.title || projectName}</h3>
-                            <p>${projectData?.description || ''}</p>
-                            <h4>Features</h4>
-                            ${featuresList}
-                            <div style="margin-top:1rem; display:flex; gap:.5rem; flex-wrap:wrap;">
-                                <a href="${readmeHref}" target="_blank" rel="noopener noreferrer" style="display:inline-block; padding:.4rem .7rem; border:1px solid var(--border-color); border-radius:6px; text-decoration:none;">Open README.md</a>
-                                <a href="${screenshotsHref}" target="_blank" rel="noopener noreferrer" style="display:inline-block; padding:.4rem .7rem; border:1px solid var(--border-color); border-radius:6px; text-decoration:none;">Open Screenshots</a>
-                            </div>
-                            <p style="opacity:.8; margin-top:.8rem; font-size:.9em;">Content preview unavailable here (likely due to local file security). Links above should open directly.</p>
-                        </div>`;
-                    return;
-                }
-                // Configure marked for GitHub-like rendering
-                marked.setOptions({
-                    gfm: true,
-                    headerIds: true,
-                    mangle: false,
-                    breaks: true
-                });
-                const renderer = new marked.Renderer();
-                const originalImage = renderer.image.bind(renderer);
-                renderer.image = (href, title, text) => {
-                    let src = href || '';
-                    if (src && !/^https?:\/\//i.test(src)) {
-                        // Use current path structure: Projects/${projectName}/Screenshots/
-                        const cleaned = src.replace(/^\.\//, '').replace(/^Screenshots\//, '');
-                        const fileName = cleaned.split('/').pop();
-                        const currentPath = `Projects/${projectName}/Screenshots/${fileName}`;
-                        return `<img src="${currentPath}" alt="${text || ''}" title="${title || ''}">`;
-                    }
-                    return originalImage(href, title, text);
-                };
-                const rawHtml = marked.parse(markdown, { renderer });
-                const safeHtml = window.DOMPurify ? DOMPurify.sanitize(rawHtml) : rawHtml;
-                container.innerHTML = safeHtml;
-
-                // Post-process images to ensure correct local paths
-                try {
-                    const images = container.querySelectorAll('img');
-                    images.forEach(img => {
-                        const src = img.getAttribute('src') || '';
-                        if (src && !/^https?:\/\//i.test(src)) {
-                            const cleaned = src.replace(/^\.\//, '').replace(/^Screenshots\//, '');
-                            const fileName = cleaned.split('/').pop();
-                            const currentPath = `Projects/${projectName}/Screenshots/${fileName}`;
-                            img.setAttribute('src', currentPath);
-                        }
-                    });
-                } catch {}
-
-                container.style.display = 'block';
-                container.style.justifyContent = '';
-                container.style.alignItems = '';
-            } catch (error) {
-                console.error('Error loading README:', error);
-                const readmeHref = `Projects/${projectName}/README.md`;
-                container.innerHTML = `
-                    <div style="text-align: left; padding: 1rem; color: var(--text-color);">
-                        <p>Preview unavailable. Try opening the README directly:</p>
-                        <p><a href="${readmeHref}" target="_blank" rel="noopener noreferrer">Open README.md</a></p>
-                        <p><small>${error.message}</small></p>
-                    </div>`;
-            }
-        }
-
-        // Toggle project details
-        async function toggleProjectDetails(button, details, projectName, projectData) {
-            const currentlyExpanded = button.getAttribute('aria-expanded') === 'true';
-            const isExpanded = !currentlyExpanded;
-            button.setAttribute('aria-expanded', String(isExpanded));
-            details.classList.toggle('visible', isExpanded);
-            button.classList.toggle('expanded', isExpanded);
-
-            const row = button.closest('.project-row');
-            if (row) row.classList.toggle('expanded', isExpanded);
-
-            const icon = button.querySelector('.chevron-icon');
-            if (icon) icon.textContent = isExpanded ? '▾' : '▸';
-
-            if (isExpanded) {
-                const readmeContainer = details.querySelector('.readme-content');
-                if (readmeContainer && !readmeContainer.hasLoaded) {
-                    await loadReadme(projectName, readmeContainer, projectData);
-                    readmeContainer.hasLoaded = true;
-                }
-            }
-        }
-
-        // Hardcoded projects data with README content
-        async function loadProjects() {
-            console.log('Loading projects from projects.json');
-            try {
-                const resp = await fetch('projects.json', { cache: 'no-store' });
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                return await resp.json();
-            } catch (err) {
-                console.warn('Failed to fetch projects.json, using inline fallback.', err);
-                return [
-                    {
-                        "id": 1,
-                        "title": "eShop",
-                        "description": "Сучасний iOS‑застосунок для перегляду каталогу побутових товарів, керування кошиком, оформлення замовлень і залишення відгуків. Бекенд побудований на безсерверній архітектурі AWS з GraphQL API на AppSync.",
-                        "technologies": ["iOS", "Swift", "UIKit", "AWS"],
-                        "folder": "eShop",
-                        "screenshots": "Screenshots",
-                        "features": [
-                        "Catalog browsing",
-                        "Shopping cart management",
-                        "Order creation",
-                        "Product reviews",
-                        "User authentication"
-                        ]
-                    },
-                    {
-                        "id": 3,
-                        "title": "YourJob",
-                        "description": "iOS‑застосунок для пошуку роботи, який допомагає швидко знаходити вакансії за заданими критеріями. Реалізований з акцентом на сучасну архітектуру, хмарні сервіси AWS та зручний інтерфейс.",
-                        "technologies": ["iOS", "Swift", "UIKit", "AWS"],
-                        "folder": "YourJob",
-                        "screenshots": "Screenshots",
-                        "features": [
-                        "User registration and authentication via Amazon Cognito",
-                        "Job search and filtering by categories, position, location, and salary",
-                        "Job details viewing",
-                        "Modern iOS interface",
-                        "AWS backend integration"
-                        ]
-                    },
-                    {
-                        "id": 2,
-                        "title": "ParserForProm",
-                        "description": "WPF‑застосунок для отримання даних про товари з різних джерел і експорту їх на PROM у формат Excel. Має модульну архітектуру, що спрощує додавання нових джерел даних.",
-                        "technologies": [".NET", "C#", "WPF"],
-                        "folder": "ParserForProm",
-                        "screenshots": "Screenshots",
-                        "features": [
-                        "Modular plugin architecture",
-                        "Multi-language support",
-                        "Modern WPF interface",
-                        "Data export to Excel",
-                        "Support for multiple data sources"
-                        ]
-                    }
-                ];
-            }
-        }
-
-        // Render projects
-        async function renderProjects() {
-            const container = document.getElementById('projects-container');
-            if (!container) {
-                console.error('Container #projects-container not found');
-                return;
-            }
-
-            // Show loading state
-            container.innerHTML = '<div style="text-align: center; padding: 2rem;">Loading projects...</div>';
-            console.log('Started loading projects...');
-
-            try {
-                // Load projects from JSON
-                const projects = await loadProjects();
-                
-                // If no projects found, show message
-                if (!projects || projects.length === 0) {
-                    const errorMsg = 'No projects found. Please check the console for errors.';
-                    console.error('No projects loaded. Projects array:', projects);
-                    container.innerHTML = `
-                        <div style="text-align: center; padding: 2rem; color: #ff6b6b;">
-                            ${errorMsg}
-                            <div style="margin-top: 1rem;">
-                                <button onclick="window.location.reload()" style="padding: 0.5rem 1rem; cursor: pointer;">
-                                    Try Again
-                                </button>
-                            </div>
-                        </div>`;
-                    return;
-                }
-
-                // Render projects (make only the title clickable to GitHub)
-                container.innerHTML = projects.map(project => `
-                    <div class="project-row" data-folder="${project.folder}">
-                        <div class="project-header">
-                            <div class="project-summary">
-                                <h3 class="project-title"><a href="${(project.folder==='eShop' && 'https://github.com/Kds2k2/eShop') || (project.folder==='ParserForProm' && 'https://github.com/Kds2k2/Parser_FromVidexToExcel') || (project.folder==='YourJob' && 'https://github.com/Kds2k2/YourJob') || '#'}" target="_blank" rel="noopener noreferrer">${project.title}</a></h3>
-                                <p class="project-description">${project.description}</p>
-                                <div class="project-tech">
-                                    <strong>Technologies:</strong> ${project.technologies.join(', ')}
-                                </div>
-                            </div>
-                            <button class="chevron-btn" aria-label="Toggle project details" aria-expanded="false">
-                                <span class="chevron-icon">▸</span>
-                            </button>
-                        </div>
-                        <div class="repo-details">
-                            <div class="readme-content" style="min-height: 100px; color: var(--text-color);">
-                                Loading project details...
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-                
-                // Add click handlers to all project rows and chevron buttons
-                document.querySelectorAll('.project-row').forEach((row, index) => {
-                    const button = row.querySelector('.chevron-btn');
-                    const details = row.querySelector('.repo-details');
-                    const projectData = projects[index];
-                    
-                    // Toggle details when clicking the row or the button
-                    row.addEventListener('click', async (e) => {
-                        // Don't toggle if clicking on a link or button
-                        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-                            return;
-                        }
-                        await toggleProjectDetails(button, details, projectData.folder, projectData);
-                    });
-                    
-                    // Also make the button toggle the details
-                    button.addEventListener('click', async (e) => {
-                        e.stopPropagation(); // Prevent row click handler from firing
-                        await toggleProjectDetails(button, details, projectData.folder, projectData);
-                    });
-                });
-
-            } catch (error) {
-                console.error('Error rendering projects:', error);
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 2rem; color: #ff6b6b;">
-                        <p>Failed to load projects. Please try again later.</p>
-                        <p><small>${error.message}</small></p>
-                    </div>`;
-            }
-        }
-
-        // Theme toggle functionality
-        function setupThemeToggle() {
-            const themeToggle = document.getElementById('theme-toggle');
-            const root = document.documentElement;
-
-            themeToggle.addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    root.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    root.setAttribute('data-theme', 'light');
-                    localStorage.setItem('theme', 'light');
-                }
-            });
-
-            // Set initial theme
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            root.setAttribute('data-theme', savedTheme);
-            themeToggle.checked = savedTheme === 'dark';
-        }
-
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', async () => {
-            await renderProjects();
-            setupThemeToggle();
-            
-            // Set profile info
-            document.getElementById('name').textContent = 'Дмитро Крижановський';
-            
-            // Check if there's a hash in the URL to auto-expand a project
-            const handleHashChange = async () => {
-                const hash = window.location.hash.substring(1);
-                if (!hash) return;
-                
-                const projectRow = document.querySelector(`.project-row[data-folder="${hash}"]`);
-                if (projectRow) {
-                    const button = projectRow.querySelector('.chevron-btn');
-                    const details = projectRow.querySelector('.repo-details');
-                    const rows = Array.from(document.querySelectorAll('.project-row'));
-                    const index = rows.indexOf(projectRow);
-                    let projects;
-                    try { projects = await loadProjects(); } catch { projects = []; }
-                    await toggleProjectDetails(button, details, hash, projects[index]);
-                    projectRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            };
-            
-            // Handle initial hash
-            await handleHashChange();
-            
-            // Handle hash changes
-            window.addEventListener('hashchange', handleHashChange);
-        });
-    </script>
 </body>
 </html>
+
+
